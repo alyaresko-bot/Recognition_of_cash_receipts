@@ -1,0 +1,42 @@
+# Виртуальное окружение
+.venv/
+venv/
+env/
+
+# Секреты и локальная конфигурация
+.env
+.env.*
+!.env.example
+
+# Ключи Google (service account). Не коммитить JSON с private_key.
+credentials.json
+**/credentials.json
+receipt-*.json
+*-service-*.json
+
+# Локальные данные бота
+*.db
+receipt_state.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE / ОС
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+Desktop.ini
+
+# Локальные заметки (не в публичный репозиторий)
+НОВАЯ РЕДАКЦИЯ.txt
