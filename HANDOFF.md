@@ -50,6 +50,45 @@
 
 ---
 
+## Quickstart (чтобы другой инженер запустил за 10 минут)
+
+### Предусловия
+- Python **3.10+**
+- Доступ к:
+  - токену Telegram‑бота (BotFather)
+  - ключу OpenAI
+  - Google Spreadsheet и JSON‑ключу Service Account (с доступом к таблице)
+
+### Установка
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+### Конфигурация
+1. Скопировать `.env.example` → `.env`
+2. Заполнить минимум:
+   - `TELEGRAM_BOT_TOKEN`
+   - `OPENAI_API_KEY`
+   - `OPENAI_VISION_MODEL` (или `OPENAI_MODEL`)
+   - `GOOGLE_SHEETS_SPREADSHEET_ID`
+   - `GOOGLE_SERVICE_ACCOUNT_FILE` (например `credentials.json`, файл **не** коммитить)
+
+Опционально:
+- `RECEIPT_QR_ENABLED=0` — отключить этап QR (fallback: только vision OCR)
+- `RECEIPT_PREPROCESS_*` — тюнинг предобработки изображений
+- `RECEIPT_STATE_BACKEND=sqlite|redis` — хранилище состояния загрузки чека
+
+### Запуск
+
+```powershell
+python bot.py
+```
+
+---
+
 ## Prompt Engineering Guide (черновик)
 
 Ниже — практические заметки “как менять промпт и не сломать пайплайн”.
@@ -96,6 +135,41 @@
 **Когда работает плохо**
 - Если QR прочитан, но на чеке фактически другой `total_amount` (редкие случаи с возвратом/двумя суммами) → возможно противоречие между QR и визуальными данными.
 - Если в попытке №2 слишком много строгих требований, модель может “переписать” значения в ущерб чтению текста (например, начать угадывать).
+
+---
+
+## “Плейбук” дебага и внесения изменений
+
+### Как понять, что QR реально применился
+- Таблица (лист чеков):
+  - **O (ФН из QR)**: заполнено → QR‑payload ФНС распознан и применён.
+  - **P (QR распознан)**: “Да/Нет” по `_meta.qr.used`.
+- В коде/логике:
+  - `receipt_qr.py::extract_fiscal_data_from_receipt_images()` нашёл QR и `parse_fiscal_qr_payload()` вернул patch.
+  - `ocr.py` выполнил `apply_qr_patch_to_receipt()` (QR всегда имеет приоритет для ключевых полей).
+
+### Где смотреть причины предупреждений
+- В Sheets:
+  - `validation_status` / `validation_comment` формируются в `google_sheets.py`.
+- В runtime:
+  - `_meta.needs_review` выставляется в `ocr.py` по финальному результату (после попыток и после QR‑патча).
+
+### Если “позиции съехали” (цены/кол-во перепутались)
+Проверять по порядку:
+1. качество исходных кадров (правый край, углы, блики);
+2. предобработку (`RECEIPT_PREPROCESS_*`, особенно crop);
+3. правила “как строить позицию” в `system_prompt.txt`;
+4. `ocr.py::should_recheck()` — не слишком ли мягко/жёстко решает про retry.
+
+### Если “чек дублируется” или “не записывается”
+- Защита от дублей в `google_sheets.py` использует composite key:
+  - `receipt_number | date | total_amount`
+  - Важно: при успешном QR, `receipt_number` это **ФД** (`i`/`fd`), а `total_amount` — из QR.
+
+### Если меняем схему таблицы
+- Лист чеков: сейчас записываем диапазон **A:P**.
+  - Добавление новых колонок требует правки `google_sheets.py` и обновления описания в `README.md`/`HANDOFF.md`.
+- Лист товаров: формируется отдельно; проверять формулу итога в `google_sheets.py` (колонка H).
 
 ---
 
