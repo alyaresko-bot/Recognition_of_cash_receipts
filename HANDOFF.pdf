@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R] /Count 6 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
@@ -15,7 +15,7 @@ stream
 BT
 /F1 10 Tf
 40 791.89 Td
-(Handoff PDF generated: 2026-05-27 22:33) Tj
+(Handoff PDF generated: 2026-05-27 22:47) Tj
 0 -12 Td
 () Tj
 0 -12 Td
@@ -143,11 +143,89 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>
 endobj
 6 0 obj
-<< /Length 5229 >>
+<< /Length 3572 >>
 stream
 BT
 /F1 10 Tf
 40 791.89 Td
+(————————————————————————————————————————) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Quickstart \(чтобы другой инженер запустил за 10 минут\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Предусловия) Tj
+0 -12 Td
+(- Python 3.10+) Tj
+0 -12 Td
+(- Доступ к:) Tj
+0 -12 Td
+(  - токену Telegram‑бота \(BotFather\)) Tj
+0 -12 Td
+(  - ключу OpenAI) Tj
+0 -12 Td
+(  - Google Spreadsheet и JSON‑ключу Service Account \(с доступом к таблице\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Установка) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(powershell) Tj
+0 -12 Td
+(python -m venv .venv) Tj
+0 -12 Td
+(.\\.venv\\Scripts\\Activate.ps1) Tj
+0 -12 Td
+(pip install -r requirements.txt) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Конфигурация) Tj
+0 -12 Td
+(1. Скопировать .env.example → .env) Tj
+0 -12 Td
+(2. Заполнить минимум:) Tj
+0 -12 Td
+(   - TELEGRAM_BOT_TOKEN) Tj
+0 -12 Td
+(   - OPENAI_API_KEY) Tj
+0 -12 Td
+(   - OPENAI_VISION_MODEL \(или OPENAI_MODEL\)) Tj
+0 -12 Td
+(   - GOOGLE_SHEETS_SPREADSHEET_ID) Tj
+0 -12 Td
+(   - GOOGLE_SERVICE_ACCOUNT_FILE \(например credentials.json, файл не коммитить\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Опционально:) Tj
+0 -12 Td
+(- RECEIPT_QR_ENABLED=0 — отключить этап QR \(fallback: только vision OCR\)) Tj
+0 -12 Td
+(- RECEIPT_PREPROCESS_* — тюнинг предобработки изображений) Tj
+0 -12 Td
+(- RECEIPT_STATE_BACKEND=sqlite|redis — хранилище состояния загрузки чека) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Запуск) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(powershell) Tj
+0 -12 Td
+(python bot.py) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+() Tj
+0 -12 Td
 (————————————————————————————————————————) Tj
 0 -12 Td
 () Tj
@@ -191,7 +269,18 @@ BT
 () Tj
 0 -12 Td
 (Параметры, которые реально влияют) Tj
-0 -12 Td
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+8 0 obj
+<< /Length 5174 >>
+stream
+BT
+/F1 10 Tf
+40 791.89 Td
 (- Чем жёстче требование “не пропускать позиции”, тем больше риск дубликатов \(особенно на стыках) Tj
 0 -12 Td
 (кадров\).) Tj
@@ -268,19 +357,226 @@ BT
 0 -12 Td
 () Tj
 0 -12 Td
-(Метрики успеха) Tj
+(“Плейбук” дебага и внесения изменений) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Как понять, что QR реально применился) Tj
+0 -12 Td
+(- Таблица \(лист чеков\):) Tj
+0 -12 Td
+(  - O \(ФН из QR\): заполнено → QR‑payload ФНС распознан и применён.) Tj
+0 -12 Td
+(  - P \(QR распознан\): “Да/Нет” по _meta.qr.used.) Tj
+0 -12 Td
+(- В коде/логике:) Tj
+0 -12 Td
+(  - receipt_qr.py::extract_fiscal_data_from_receipt_images\(\) нашёл QR и) Tj
+0 -12 Td
+(parse_fiscal_qr_payload\(\) вернул patch.) Tj
+0 -12 Td
+(  - ocr.py выполнил apply_qr_patch_to_receipt\(\) \(QR всегда имеет приоритет для ключевых полей\).) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Где смотреть причины предупреждений) Tj
+0 -12 Td
+(- В Sheets:) Tj
+0 -12 Td
+(  - validation_status / validation_comment формируются в google_sheets.py.) Tj
+0 -12 Td
+(- В runtime:) Tj
+0 -12 Td
+(  - _meta.needs_review выставляется в ocr.py по финальному результату \(после попыток и после) Tj
+0 -12 Td
+(QR‑патча\).) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Если “позиции съехали” \(цены/кол-во перепутались\)) Tj
+0 -12 Td
+(Проверять по порядку:) Tj
+0 -12 Td
+(1. качество исходных кадров \(правый край, углы, блики\);) Tj
+0 -12 Td
+(2. предобработку \(RECEIPT_PREPROCESS_*, особенно crop\);) Tj
+0 -12 Td
+(3. правила “как строить позицию” в system_prompt.txt;) Tj
 ET
 endstream
 endobj
-7 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 6 0 R >>
 endobj
-8 0 obj
-<< /Length 3780 >>
+10 0 obj
+<< /Length 5184 >>
 stream
 BT
 /F1 10 Tf
 40 791.89 Td
+(4. ocr.py::should_recheck\(\) — не слишком ли мягко/жёстко решает про retry.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Если “чек дублируется” или “не записывается”) Tj
+0 -12 Td
+(- Защита от дублей в google_sheets.py использует composite key:) Tj
+0 -12 Td
+(  - receipt_number | date | total_amount) Tj
+0 -12 Td
+(  - Важно: при успешном QR, receipt_number это ФД \(i/fd\), а total_amount — из QR.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Если меняем схему таблицы) Tj
+0 -12 Td
+(- Лист чеков: сейчас записываем диапазон A:P.) Tj
+0 -12 Td
+(  - Добавление новых колонок требует правки google_sheets.py и обновления описания в) Tj
+0 -12 Td
+(README.md/HANDOFF.md.) Tj
+0 -12 Td
+(- Лист товаров: формируется отдельно; проверять формулу итога в google_sheets.py \(колонка H\).) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(————————————————————————————————————————) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Troubleshooting FAQ \(быстрые ответы\)) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(1\) Бот не стартует: ModuleNotFoundError: No module named 'telegram') Tj
+0 -12 Td
+(Причина: запуск не из виртуального окружения, где стоят зависимости.  ) Tj
+0 -12 Td
+(Решение:) Tj
+0 -12 Td
+(- активировать .venv и запускать python bot.py, или) Tj
+0 -12 Td
+(- запускать напрямую .\\.venv\\Scripts\\python.exe .\\bot.py.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(2\) Падает с TELEGRAM_BOT_TOKEN не задан / OPENAI_API_KEY не задан) Tj
+0 -12 Td
+(Причина: не заполнен .env или переменные окружения не подхватились.  ) Tj
+0 -12 Td
+(Решение:) Tj
+0 -12 Td
+(- проверить, что .env лежит в корне проекта \(рядом с config.py\);) Tj
+0 -12 Td
+(- заполнить TELEGRAM_BOT_TOKEN, OPENAI_API_KEY;) Tj
+0 -12 Td
+(- при необходимости перезапустить процесс бота.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(3\) Google Sheets не пишет: FileNotFoundError credentials.json / ошибки авторизации) Tj
+0 -12 Td
+(Причина: неверный путь GOOGLE_SERVICE_ACCOUNT_FILE, отсутствует файл ключа или нет доступа к) Tj
+0 -12 Td
+(таблице.  ) Tj
+0 -12 Td
+(Решение:) Tj
+0 -12 Td
+(- убедиться, что GOOGLE_SERVICE_ACCOUNT_FILE указывает на существующий JSON ключ;) Tj
+0 -12 Td
+(- выдать таблице доступ на e‑mail сервисного аккаунта \(из JSON\);) Tj
+0 -12 Td
+(- проверить GOOGLE_SHEETS_SPREADSHEET_ID и имена листов.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(4\) QR “не распознан” \(P=Нет\), хотя на чеке QR есть) Tj
+0 -12 Td
+(Причины:) Tj
+0 -12 Td
+(- QR на фото слишком мелкий/размытый/в бликах;) Tj
+0 -12 Td
+(- QR прочитался, но строка не похожа на фискальный формат ФНС \(нет t/s/fn/i|fd/fp\).  ) Tj
+0 -12 Td
+(Решения:) Tj
+0 -12 Td
+(- улучшить фото: ближе, без бликов, резкость;) Tj
+0 -12 Td
+(- временно отключить агрессивную обработку \(если включали crop\);) Tj
+0 -12 Td
+(- проверить, что RECEIPT_QR_ENABLED=1;) Tj
+0 -12 Td
+(- при необходимости добавить поддержку ещё одного варианта payload в) Tj
+0 -12 Td
+(receipt_qr.py::parse_fiscal_qr_payload\(\).) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(5\) QR распознан, но поля в таблице “странные” \(дата/сумма/ФД не совпадают с текстом\)) Tj
+0 -12 Td
+(Причина: в этом проекте QR для ключевых полей — истина и имеет приоритет над визуальным OCR.  ) Tj
+0 -12 Td
+(Решение:) Tj
+0 -12 Td
+(- сверить “сырой payload” \(в _meta.qr.raw, если выводится/логируется\) и значения в столбцах;) Tj
+0 -12 Td
+(- если на конкретном типе чеков QR кодирует сумму в другом формате, адаптировать) Tj
+0 -12 Td
+(_amount_to_total_amount_str\(\) в receipt_qr.py.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(6\) “Предупреждение по суммам”, хотя визуально всё нормально) Tj
+0 -12 Td
+(Причины:) Tj
+0 -12 Td
+(- items_total - discounts не сходится с total_amount \(ошибка чтения чисел, пропуск позиции,) Tj
+0 -12 Td
+(дубль\);) Tj
+0 -12 Td
+(- включился needs_review после финальной проверки.  ) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 8 0 R >>
+endobj
+12 0 obj
+<< /Length 4907 >>
+stream
+BT
+/F1 10 Tf
+40 791.89 Td
+(Решения:) Tj
+0 -12 Td
+(- смотреть validation_comment в таблице и debug‑сообщение от бота \(если включено\);) Tj
+0 -12 Td
+(- для длинных чеков проверить стыки кадров \(не дублируются ли позиции\);) Tj
+0 -12 Td
+(- при необходимости усилить/ослабить критерии ocr.py::should_recheck\(\).) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(7\) “Чек уже присутствует в таблице \(защита от дублей\)”) Tj
+0 -12 Td
+(Причина: сработал composite key: receipt_number|date|total_amount.  ) Tj
+0 -12 Td
+(Решения:) Tj
+0 -12 Td
+(- ожидаемо при повторной отправке того же чека;) Tj
+0 -12 Td
+(- если хотите другой критерий \(например, включить fn/fp\) — изменить composite key в) Tj
+0 -12 Td
+(google_sheets.py.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(————————————————————————————————————————) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Метрики успеха) Tj
+0 -12 Td
 () Tj
 0 -12 Td
 (Технические метрики \(pipeline health\)) Tj
@@ -372,30 +668,47 @@ BT
 (- ФН из QR: Google Sheets столбец O.) Tj
 0 -12 Td
 (- Почему предупреждение?: validation_status/validation_comment \(лист чеков\) + debug‑сообщение в) Tj
-0 -12 Td
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 10 0 R >>
+endobj
+14 0 obj
+<< /Length 88 >>
+stream
+BT
+/F1 10 Tf
+40 791.89 Td
 (Telegram \(если включено\).) Tj
 0 -12 Td
 () Tj
 ET
 endstream
 endobj
-9 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 6 0 R >>
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 841] /Resources << /Font << /F1 1 0 R >> >> /Contents 12 0 R >>
 endobj
 xref
-0 10
+0 16
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000133 00000 n 
-0000000203 00000 n 
-0000005372 00000 n 
-0000005498 00000 n 
-0000010779 00000 n 
-0000010905 00000 n 
-0000014737 00000 n 
+0000000153 00000 n 
+0000000223 00000 n 
+0000005392 00000 n 
+0000005518 00000 n 
+0000009142 00000 n 
+0000009268 00000 n 
+0000014494 00000 n 
+0000014620 00000 n 
+0000019857 00000 n 
+0000019984 00000 n 
+0000024944 00000 n 
+0000025072 00000 n 
+0000025211 00000 n 
 trailer
-<< /Size 10 /Root 1 0 R >>
+<< /Size 16 /Root 1 0 R >>
 startxref
-14863
+25339
 %%EOF
